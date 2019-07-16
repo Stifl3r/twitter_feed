@@ -36,6 +36,7 @@ public class FeedService {
     }
 
     protected List<Tweet> processTweets(MultipartFile feedFile) throws IOException {
+        // Read file and format tweets per user
         String content = new String(feedFile.getBytes());
         String[] lines = content.split("\\r?\\n");
 
@@ -52,6 +53,7 @@ public class FeedService {
     }
 
     protected List<User> processUsers(MultipartFile usersFile) throws IOException {
+        // Read file contents and split into lines
         String content = new String(usersFile.getBytes());
         String[] lines = content.split("\\r?\\n");
 
@@ -59,6 +61,7 @@ public class FeedService {
         ArrayList<String> users = new ArrayList<>();
         for (String line: lines) {
 
+            // Delimit lines and add users
             String[] lineSplit = line.split(" ");
 
             List<String> lineList = new ArrayList<>(lineSplit.length);
@@ -72,6 +75,7 @@ public class FeedService {
                followingList.add(item.replace("," , ""));
             }
 
+            // Retrieve existing user and add users followed
             if (users.contains(userToBeAdded)) {
                 User currentUser = result.stream()
                         .filter(user -> userToBeAdded.equals(user.getUsername()))
@@ -102,6 +106,7 @@ public class FeedService {
                 result.add(user);
             }
             users.add(userToBeAdded);
+            // Add users that are followed but not provided in the file
             for(String item: followingList) {
                 if(!users.contains(item)) {
                     User newUser = new User();
