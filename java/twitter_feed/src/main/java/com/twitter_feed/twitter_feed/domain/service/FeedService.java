@@ -18,11 +18,25 @@ public class FeedService {
 
         List<User> users = processUsers(usersFile);
 
-        List<Tweet> tweets = processFeed(feedFile);
+        List<Tweet> tweets = processTweets(feedFile);
+
+        processFeed(users, tweets);
         return null;
     }
 
-    private List<Tweet> processFeed(MultipartFile feedFile) throws IOException {
+    private void processFeed(List<User> users, List<Tweet> tweets) {
+        for(User user: users) {
+            System.out.println(user.getUsername());
+            for(Tweet tweet: tweets) {
+                if(tweet.getUsername().equals(user.getUsername()) ||
+                  user.getUsersFollowed().contains(tweet.getUsername())) {
+                    System.out.println("\t\t@"+tweet.getUsername() + ": " +tweet.getMessage());
+                }
+            }
+        }
+    }
+
+    private List<Tweet> processTweets(MultipartFile feedFile) throws IOException {
         String content = new String(feedFile.getBytes());
         String[] lines = content.split("\\r?\\n");
 
