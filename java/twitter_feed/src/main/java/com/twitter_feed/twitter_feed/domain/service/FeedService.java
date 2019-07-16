@@ -6,9 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class FeedService {
@@ -17,6 +15,8 @@ public class FeedService {
 
 
         List<User> users = processUsers(usersFile);
+
+        users.sort(Comparator.comparing(o -> o.getUsername()));
 
         List<Tweet> tweets = processTweets(feedFile);
 
@@ -56,7 +56,6 @@ public class FeedService {
         String content = new String(usersFile.getBytes());
         String[] lines = content.split("\\r?\\n");
 
-
         List<User> result = new ArrayList<>();
         ArrayList<String> users = new ArrayList<>();
         for (String line: lines) {
@@ -69,6 +68,11 @@ public class FeedService {
             lineList.remove(0);
             lineList.remove(0);
 
+            List<String> followingList = new ArrayList<>();
+            for(String item: lineList) {
+               followingList.add(item.replace("," , ""));
+            }
+
             if (users.contains(userToBeAdded)) {
                 User currentUser = result.stream()
                         .filter(user -> userToBeAdded.equals(user.getUsername()))
@@ -77,32 +81,37 @@ public class FeedService {
 
                 result.removeIf(user -> userToBeAdded.equals(user.getUsername()));
 
-
-
-                for(String follower : lineList) {
-                   if(currentUser.getUsersFollowed().contains(follower)) {
-
-                   } else {
-                       currentUser.getUsersFollowed().add(follower);
-                   }
+                List<String> newFollowingList = null;
+                if (currentUser != null) {
+                    newFollowingList = new ArrayList<>(currentUser.getUsersFollowed());
                 }
-
+                for(String follower : followingList) {
+                    if (currentUser.getUsersFollowed() == null || (!currentUser.getUsersFollowed().contains(follower))) {
+                        newFollowingList.add(follower);
+                    }
+                }
+                currentUser.setUsersFollowed(newFollowingList);
                 result.add(currentUser);
-
-
-                System.out.println(" ");
 
             } else {
                 users.add(userToBeAdded);
 
                 User user = new User();
                 user.setUsername(lineSplit[0]);
-                user.setUsersFollowed(lineList);
+                user.setUsersFollowed(followingList);
 
                 result.add(user);
             }
             users.add(userToBeAdded);
-
+            for(String item: followingList) {
+                if(!users.contains(item)) {
+                    User newUser = new User();
+                    newUser.setUsername(item);
+                    newUser.setUsersFollowed(Collections.EMPTY_LIST);
+                    result.add(newUser);
+                    users.add(item);
+                }
+            }
         }
         return result;
     }
