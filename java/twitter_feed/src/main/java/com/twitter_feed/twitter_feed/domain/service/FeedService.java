@@ -66,6 +66,9 @@ public class FeedService {
             List<String> lineList = new ArrayList<>(lineSplit.length);
             Collections.addAll(lineList, lineSplit);
             String userToBeAdded = (lineSplit[0]);
+            lineList.remove(0);
+            lineList.remove(0);
+
             if (users.contains(userToBeAdded)) {
                 User currentUser = result.stream()
                         .filter(user -> userToBeAdded.equals(user.getUsername()))
@@ -74,8 +77,7 @@ public class FeedService {
 
                 result.removeIf(user -> userToBeAdded.equals(user.getUsername()));
 
-                lineList.remove(0);
-                lineList.remove(0);
+
 
                 for(String follower : lineList) {
                    if(currentUser.getUsersFollowed().contains(follower)) {
@@ -91,17 +93,15 @@ public class FeedService {
                 System.out.println(" ");
 
             } else {
-                users.add(lineSplit[0]);
+                users.add(userToBeAdded);
 
                 User user = new User();
                 user.setUsername(lineSplit[0]);
-                lineList.remove(0);
-                lineList.remove(0);
-
                 user.setUsersFollowed(lineList);
 
                 result.add(user);
             }
+            users.add(userToBeAdded);
 
         }
         return result;
