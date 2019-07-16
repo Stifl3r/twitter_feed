@@ -1,5 +1,6 @@
 package com.twitter_feed.twitter_feed.domain.service;
 
+import com.twitter_feed.twitter_feed.domain.model.Tweet;
 import com.twitter_feed.twitter_feed.domain.model.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,14 +14,34 @@ import java.util.List;
 public class FeedService {
 
     public String process(MultipartFile feedFile, MultipartFile usersFile) throws IOException {
-        String content = new String(usersFile.getBytes());
-        String[] lines = content.split("\\r?\\n");
 
-        List<User> users = processUsers(lines);
+
+        List<User> users = processUsers(usersFile);
+
+        List<Tweet> tweets = processFeed(feedFile);
         return null;
     }
 
-    private List<User> processUsers(String[] lines) {
+    private List<Tweet> processFeed(MultipartFile feedFile) throws IOException {
+        String content = new String(feedFile.getBytes());
+        String[] lines = content.split("\\r?\\n");
+
+        List<Tweet> result = new ArrayList<>();
+
+        for(String line: lines) {
+            String[] lineSplit = line.split(">");
+            Tweet tweet = new Tweet();
+            tweet.setUsername(lineSplit[0]);
+            tweet.setMessage(lineSplit[1]);
+            result.add(tweet);
+        }
+        return result;
+    }
+
+    private List<User> processUsers(MultipartFile usersFile) throws IOException {
+        String content = new String(usersFile.getBytes());
+        String[] lines = content.split("\\r?\\n");
+
 
         List<User> result = new ArrayList<>();
         ArrayList<String> users = new ArrayList<>();
