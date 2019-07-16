@@ -2,7 +2,6 @@ package com.twitter_feed.twitter_feed.domain.service;
 
 import com.twitter_feed.twitter_feed.domain.model.User;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -31,16 +30,43 @@ public class FeedService {
 
             List<String> lineList = new ArrayList<>(lineSplit.length);
             Collections.addAll(lineList, lineSplit);
-            users.add( (line.split("\\ ?\\,"))[0]);
+            String userToBeAdded = (lineSplit[0]);
+            if (users.contains(userToBeAdded)) {
+                User currentUser = result.stream()
+                        .filter(user -> userToBeAdded.equals(user.getUsername()))
+                        .findFirst()
+                        .orElse(null);
 
-            User user = new User();
-            user.setUsername(lineSplit[0]);
-            lineList.remove(0);
-            lineList.remove(0);
+                result.removeIf(user -> userToBeAdded.equals(user.getUsername()));
 
-            user.setUsersFollowed(lineList);
+                lineList.remove(0);
+                lineList.remove(0);
 
-            result.add(user);
+                for(String follower : lineList) {
+                   if(currentUser.getUsersFollowed().contains(follower)) {
+
+                   } else {
+                       currentUser.getUsersFollowed().add(follower);
+                   }
+                }
+
+                result.add(currentUser);
+
+
+                System.out.println(" ");
+
+            } else {
+                users.add(lineSplit[0]);
+
+                User user = new User();
+                user.setUsername(lineSplit[0]);
+                lineList.remove(0);
+                lineList.remove(0);
+
+                user.setUsersFollowed(lineList);
+
+                result.add(user);
+            }
 
         }
         return result;
