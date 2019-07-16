@@ -19,7 +19,7 @@ public class SwaggerConfig {
     public Docket documentation() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage("com.twitter_feed.twitter_feed.application.controller"))
                 .paths(PathSelectors.any())
                 .build()
                 .useDefaultResponseMessages(false)
@@ -33,8 +33,8 @@ public class SwaggerConfig {
                 .version("0.1")
                 .contact(new Contact(
                         "Arnold",
-                        "apiHost",
-                        "apiEmail"))
+                        "localhost",
+                        "a@b.com"))
                 .build();
     }
 }
