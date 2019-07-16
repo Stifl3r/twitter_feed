@@ -13,7 +13,6 @@ public class FeedService {
 
     public String process(MultipartFile feedFile, MultipartFile usersFile) throws IOException {
 
-
         List<User> users = processUsers(usersFile);
 
         users.sort(Comparator.comparing(o -> o.getUsername()));
@@ -21,7 +20,7 @@ public class FeedService {
         List<Tweet> tweets = processTweets(feedFile);
 
         processFeed(users, tweets);
-        return null;
+        return "Success";
     }
 
     private void processFeed(List<User> users, List<Tweet> tweets) {
@@ -36,7 +35,7 @@ public class FeedService {
         }
     }
 
-    private List<Tweet> processTweets(MultipartFile feedFile) throws IOException {
+    protected List<Tweet> processTweets(MultipartFile feedFile) throws IOException {
         String content = new String(feedFile.getBytes());
         String[] lines = content.split("\\r?\\n");
 
@@ -52,7 +51,7 @@ public class FeedService {
         return result;
     }
 
-    private List<User> processUsers(MultipartFile usersFile) throws IOException {
+    protected List<User> processUsers(MultipartFile usersFile) throws IOException {
         String content = new String(usersFile.getBytes());
         String[] lines = content.split("\\r?\\n");
 

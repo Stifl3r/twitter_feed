@@ -24,10 +24,11 @@ public class FeedsController {
     @Autowired
     private FeedService feedService;
 
-    @PostMapping
+    @PostMapping("")
     public String uploadContent(@RequestParam("usersFile") MultipartFile usersFile,
                                 @RequestParam("feedFile") MultipartFile feedFile) throws IOException {
+
         String result = feedService.process(usersFile, feedFile);
-        return null;
+        return result;
     }
 }
