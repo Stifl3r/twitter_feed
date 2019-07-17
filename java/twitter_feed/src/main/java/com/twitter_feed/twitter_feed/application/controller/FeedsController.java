@@ -41,7 +41,7 @@ public class FeedsController {
                     .body("File size limit exceeded");
         } catch (Exception e) {
             return ResponseEntity.status(500)
-                    .body("Oops! Something went wrong, Please contact administrator");
+                    .body("Oops! Something went wrong, Please contact administrator.");
         }
     }
 
