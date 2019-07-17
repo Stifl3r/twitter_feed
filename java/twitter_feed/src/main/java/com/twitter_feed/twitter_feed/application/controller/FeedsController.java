@@ -14,11 +14,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 import static com.twitter_feed.twitter_feed.application.controller.constant.RestConstants.BASE_URL;
+import static com.twitter_feed.twitter_feed.application.controller.constant.RestConstants.UPLOADS_URL;
 import static java.net.HttpURLConnection.*;
 
 @Api(tags = {"Feed"})
 @RestController
-@RequestMapping(BASE_URL)
+@RequestMapping(BASE_URL + UPLOADS_URL)
 @ApiResponses(value = {
         @ApiResponse(code = HTTP_OK, message = "OK"),
         @ApiResponse(code = HTTP_BAD_REQUEST, message = "Bad Request"),
