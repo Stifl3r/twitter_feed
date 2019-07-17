@@ -27,6 +27,7 @@ public class FeedService {
 
     private void processFeed(List<User> users, List<Tweet> tweets) {
         log.info("Process timeline feed from a list of users and tweets");
+
         for(User user: users) {
             System.out.println(user.getUsername());
             for(Tweet tweet: tweets) {
@@ -40,6 +41,7 @@ public class FeedService {
 
     protected List<Tweet> processTweets(MultipartFile feedFile) throws IOException {
         log.info("Read multipart file and arrange tweets per user");
+
         // Read file and format tweets per user
         String content = new String(feedFile.getBytes());
         String[] lines = content.split("\\r?\\n");
