@@ -4,7 +4,9 @@ Simulation of a twitter feed app
 Dependencies:
 
 Java 1.8 <=
+
 Gradle
+
 Springboot 2
 
 
@@ -27,4 +29,9 @@ Console output will be on the terminal the project is run from
 #Assumptions 
 Based on the user sample files provided,an assumption has been made that users being followed will always be delimeted by ',' and ' '. Eg: 'User follows foo, bar, pie, roasted'.
 
+Stretch Goals:
+
+1. Include crud operations for user and tweets
+2. Introduce a formal storage(mongo or postgres)
+3. run app and storage in docker containers
 

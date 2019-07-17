@@ -20,10 +20,12 @@ public class UserService {
     private FeedService feedService;
 
     public List<User> getListOfUsers() throws IOException {
+        log.info("Send data to feed service and retrieve formatted list of users");
         return feedService.processUsers(getRawData());
     }
 
     public User getUserByUsername(String username) throws IOException {
+        log.info("Retrieving user by user name");
         List<User> users = feedService.processUsers(getRawData());
         return users.stream()
                 .filter(user -> username.equals(user.getUsername()))
@@ -32,6 +34,7 @@ public class UserService {
     }
 
     private String getRawData() throws IOException {
+        log.info("Reading file from storage");
         File file = getFileFromResources("user.txt");
         BufferedReader br = new BufferedReader(new FileReader(file));
         StringBuffer stringBuffer = new StringBuffer();
@@ -44,6 +47,7 @@ public class UserService {
     }
 
     private File getFileFromResources(String fileName) {
+        log.info("Retrieve local resources");
         ClassLoader classLoader = getClass().getClassLoader();
         URL resource = classLoader.getResource(fileName);
         if (resource == null) {
