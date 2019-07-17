@@ -23,3 +23,8 @@ Open browser and navigate to http://localhost:8080/swagger-ui.html#/
 You should now be able to upload feedfile and tweetfile under the feedController on swagger and execute.
 
 Console output will be on the terminal the project is run from
+
+#Assumptions 
+Based on the user sample files provided,an assumption has been made that users being followed will always be delimeted by ',' and ' '. Eg: 'User follows foo, bar, pie, roasted'.
+
+
