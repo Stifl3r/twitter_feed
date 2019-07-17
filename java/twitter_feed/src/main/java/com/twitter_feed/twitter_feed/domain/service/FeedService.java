@@ -2,6 +2,7 @@ package com.twitter_feed.twitter_feed.domain.service;
 
 import com.twitter_feed.twitter_feed.domain.model.Tweet;
 import com.twitter_feed.twitter_feed.domain.model.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,6 +10,7 @@ import java.io.IOException;
 import java.util.*;
 
 @Component
+@Slf4j
 public class FeedService {
 
     public String process(MultipartFile feedFile, MultipartFile usersFile) throws IOException {
@@ -24,6 +26,7 @@ public class FeedService {
     }
 
     private void processFeed(List<User> users, List<Tweet> tweets) {
+        log.info("Process timeline feed from a list of users and tweets");
         for(User user: users) {
             System.out.println(user.getUsername());
             for(Tweet tweet: tweets) {
@@ -36,6 +39,7 @@ public class FeedService {
     }
 
     protected List<Tweet> processTweets(MultipartFile feedFile) throws IOException {
+        log.info("Read multipart file and arrange tweets per user");
         // Read file and format tweets per user
         String content = new String(feedFile.getBytes());
         String[] lines = content.split("\\r?\\n");
@@ -53,6 +57,7 @@ public class FeedService {
     }
 
     protected List<User> processUsers(MultipartFile usersFile) throws IOException {
+        log.info("Read multipart file and arrange users and users followed");
         // Read file contents and split into lines
         String content = new String(usersFile.getBytes());
         String[] lines = content.split("\\r?\\n");
