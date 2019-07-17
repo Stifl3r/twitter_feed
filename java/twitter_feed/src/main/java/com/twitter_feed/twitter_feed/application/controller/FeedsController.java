@@ -1,8 +1,11 @@
 package com.twitter_feed.twitter_feed.application.controller;
 
 import com.twitter_feed.twitter_feed.domain.service.FeedService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +16,7 @@ import java.io.IOException;
 import static com.twitter_feed.twitter_feed.application.controller.constant.RestConstants.BASE_URL;
 import static java.net.HttpURLConnection.*;
 
+@Api(tags = {"Feed"})
 @RestController
 @RequestMapping(BASE_URL)
 @ApiResponses(value = {
@@ -20,6 +24,7 @@ import static java.net.HttpURLConnection.*;
         @ApiResponse(code = HTTP_BAD_REQUEST, message = "Bad Request"),
         @ApiResponse(code = HTTP_INTERNAL_ERROR, message = "Internal server error")
 })
+@Slf4j
 public class FeedsController {
 
     @Autowired
@@ -28,18 +33,22 @@ public class FeedsController {
     @PostMapping("")
     public ResponseEntity<?> uploadContent(@RequestParam("tweetFile") MultipartFile tweetFile,
                                                @RequestParam("usersFile") MultipartFile usersFile) throws IOException {
+        log.info("Received two multipart files and initiating processing");
         try {
             if (isFileTypeValid(usersFile) && isFileTypeValid(usersFile)) {
                 String result = feedService.process(tweetFile, usersFile);
                 return ResponseEntity.ok(result);
             } else {
+                log.info("Incorrect file format provided");
                 return ResponseEntity.badRequest()
                         .body("Only Text files are allowed");
             }
         } catch (ArrayIndexOutOfBoundsException e) {
+            log.error("Incorrect file size submitted :" + e);
             return ResponseEntity.badRequest()
                     .body("File size limit exceeded");
         } catch (Exception e) {
+            log.error("Investigate : "+ e);
             return ResponseEntity.status(500)
                     .body("Oops! Something went wrong, Please contact administrator.");
         }
