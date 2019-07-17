@@ -33,5 +33,6 @@ Stretch Goals:
 
 1. Include crud operations for user and tweets
 2. Introduce a formal storage(mongo or postgres)
-3. run app and storage in docker containers
+3. Create SPA(Angular or React) to consume api
+4. run spa, api and storage in docker containers
 
