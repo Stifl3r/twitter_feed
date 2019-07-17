@@ -15,7 +15,7 @@ public class FeedService {
 
     public String process(MultipartFile feedFile, MultipartFile usersFile) throws IOException {
 
-        List<User> users = processUsers(usersFile);
+        List<User> users = processUsers(new String(usersFile.getBytes()));
 
         users.sort(Comparator.comparing(o -> o.getUsername()));
 
@@ -58,10 +58,9 @@ public class FeedService {
         return result;
     }
 
-    protected List<User> processUsers(MultipartFile usersFile) throws IOException {
+    protected List<User> processUsers(String content) throws IOException {
         log.info("Read multipart file and arrange users and users followed");
         // Read file contents and split into lines
-        String content = new String(usersFile.getBytes());
         String[] lines = content.split("\\r?\\n");
 
         List<User> result = new ArrayList<>();
