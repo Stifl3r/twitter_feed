@@ -10,7 +10,11 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,9 +40,7 @@ public class FeedServiceTest {
     @Test
     public void processUsersTest() throws IOException {
 
-        MockMultipartFile userFile = new MockMultipartFile("data", "user.txt", "text/plain", "Alan follows Martin".getBytes());
-
-        List<User> result = feedService.processUsers(userFile);
+        List<User> result = feedService.processUsers(getRawData("user.txt"));
 
         assertThat(result.get(0).getUsername()).isEqualTo("Alan");
 
@@ -54,5 +56,27 @@ public class FeedServiceTest {
         List<Tweet> result = feedService.processTweets(tweetsFile);
 
         assertThat(result.get(0)).isEqualToComparingFieldByFieldRecursively(tweet);
+    }
+
+    private String getRawData(String fileName) throws IOException {
+        File file = getFileFromResources(fileName);
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        StringBuffer stringBuffer = new StringBuffer();
+        String line;
+        while((line = br.readLine())!=null) {
+
+            stringBuffer.append(line).append("\n");
+        }
+        return stringBuffer.toString();
+    }
+
+    private File getFileFromResources(String fileName) {
+        ClassLoader classLoader = getClass().getClassLoader();
+        URL resource = classLoader.getResource(fileName);
+        if (resource == null) {
+            throw new IllegalArgumentException("file is not found!");
+        } else {
+            return new File(resource.getFile());
+        }
     }
 }
