@@ -18,6 +18,7 @@ Springboot 2
 3. cd to twitter_feed/java/twitter_feed
 
 4. run ```gradle build``` then ```gradle bootrun```
+(Known issues with annotation processing when running the app in terminal. Enabling it in IDE IntellJ preferences> build, execution deployment> annotation processing > enable... fixes the issue. Working on a fix)
 
 5. Open browser and navigate to http://localhost:8080/swagger-ui.html#/
 
