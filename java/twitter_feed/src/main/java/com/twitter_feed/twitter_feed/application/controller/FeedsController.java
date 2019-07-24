@@ -36,7 +36,7 @@ public class FeedsController {
                                                @RequestParam("usersFile") MultipartFile usersFile) throws IOException {
         log.info("Received two multipart files and initiating processing");
         try {
-            if (isFileTypeValid(usersFile) && isFileTypeValid(usersFile)) {
+            if (isFileTypeValid(usersFile) && isFileTypeValid(tweetFile)) {
                 String result = feedService.process(tweetFile, usersFile);
                 return ResponseEntity.ok(result);
             } else {
